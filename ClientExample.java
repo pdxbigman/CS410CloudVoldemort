@@ -64,9 +64,7 @@ public class ClientExample {
                 while((line = br.readLine()) != null){
                     String [] result = line.split(cvsSplitBy);
                     array.add(result);
-                    System.out.println("Stationid: " + result[0] + " highwayid: " + result[1] +
-                            " Milepost: " + result[2] + " LocationText: " + result[3] + " Upstream: " + result[4] + " Downstream: " + result[5] + " StationClass: " + result[6] + " NumberLanes: " + result[7] + " Location: " + result[8] + " Length: " + result[9] + "\n");
-                }
+                    }
             }catch(Exception e){}
 
         }catch(Exception e){}
@@ -93,10 +91,7 @@ public class ClientExample {
                 while((line = br.readLine()) != null){
                     String [] result = line.split(cvsSplitBy);
                     array.add(result);
-                    System.out.println("DectectorID: " + result[0] + " Highwayid: " + result[1] +
-                            " Milepost: " + result[2] + " LocationText: " + result[3] + " DetectorClass: " + result[4] + " LaneNumber: "
-                            + result[5] + " StationID: " + result[6] + "\n");
-                }
+                    }
             }catch(Exception e){}
 
         }catch(Exception e){}
@@ -123,9 +118,7 @@ public class ClientExample {
                 while((line = br.readLine()) != null){
                     String [] result = line.split(cvsSplitBy);
                     array.add(result);
-                    System.out.println("HighwayID: " + result[0] + " ShortDirection: " + result[1] +
-                            " Direction: " + result[2] + " HighwayName: " + result[3] + "\n");
-                }
+                    }
             }catch(Exception e){}
 
         }catch(Exception e){}
@@ -152,10 +145,7 @@ public class ClientExample {
                 while((line = br.readLine()) != null){
                     String [] result = line.split(cvsSplitBy);
                     array.add(result);
-                    System.out.println("DetectorID: " + result[0] + " StartTime: " + result[1] +
-                            " Volume: " + result[2] + " Speed: " + result[3] + " Occupancy: " + result[4]+
-                            " Status: " + result[5] + " Dqflags: " + result[6] + "\n");
-                }
+                    }
             }catch(Exception e){}
 
         }catch(Exception e){}
@@ -285,7 +275,6 @@ public class ClientExample {
         Iterator<String[]> iter = data.iterator();
 
         // creating initial k-v pair
-        System.out.println("Creating initial Key and Value");
         String keySchemaJson = "{ \"name\": \"key\", \"type\": \"record\", \"fields\": [{ \"name\": \"num\", \"type\": \"int\" }] }";
         Schema keySchema = Schema.parse(keySchemaJson);
         GenericRecord key = new GenericData.Record(keySchema);
@@ -361,7 +350,6 @@ public class ClientExample {
         Iterator<String[]> iter = data.iterator();
         int num = 0;
         // creating initial k-v pair
-        System.out.println("Creating initial Key and Value");
         String keySchemaJson = "{ \"name\": \"key\", \"type\": \"record\", \"fields\": [{ \"name\": \"num\", \"type\": \"int\" }] }";
         Schema keySchema = Schema.parse(keySchemaJson);
         GenericRecord key = new GenericData.Record(keySchema);
