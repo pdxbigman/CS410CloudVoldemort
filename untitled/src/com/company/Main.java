@@ -304,7 +304,38 @@ public class Main {
                 }
             }
         }
-        int afternoonAvg = 
+        //these two values
+        int morningAvg = morningSpeedTotal/morningCount;
+        int afternoonAvg = afternoonSpeedTotal/afternoonCount;
+    }
+
+    public static void Query6(){
+        //find a route from Johnson Creek to Columbia blvd going northbound.
+
+        //query all the northbound stations
+        Vector<String[]> myarr = new Vector<String[]>(5,1);
+        String data = null;
+        String startval = "1046"; //johnson creek
+        while((data = StationStore.get(i))!=null){
+            if(data.highwayid.equals("3"))
+            {
+                //add to vector
+                myarr.add(data);
+            }
+        }
+        Vector<String> route = new Vector<String>(5,1);
+        //loop through and add the next value of the downstream to the list, then replace that value with the next
+        while(startval!=0)
+        {
+            for(int i = 0; i < myarr.size(); i++)
+            {
+                if(myarr.get(i).stationid.equals(startval)) {
+                    route.add(myarr.get(i));
+                    startval = myarr.get(i).downstream;
+                }
+            }
+        }
+        //route is now populated with the route from johnson creek to columbia
     }
 
 
