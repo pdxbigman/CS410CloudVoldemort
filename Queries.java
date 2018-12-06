@@ -178,7 +178,7 @@ public class Queries {
         Versioned<GenericRecord> versioned;
         while((versioned = detectors.get(key)) != null){
           detector = versioned.getValue();
-          if(((String) detector.get("locationtext")).equals("Foster NB")){
+          if(detector.get("locationtext").toString().equals("Foster NB")){
             MyVec.add((Integer) detector.get("detectorid"));
           }
           i++;
@@ -191,7 +191,7 @@ public class Queries {
         while((versioned = loopdata.get(key))!=null){
             loop = versioned.getValue();
             if(MyVec.contains((Integer) loop.get("detectorid"))){
-                if(((String) loop.get("starttime")).startsWith("9/15/2011")){
+                if(loop.get("starttime").toString().startsWith("9/15/2011")){
                     total += (Integer) loop.get("volume");
                 }
             }
