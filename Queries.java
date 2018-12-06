@@ -38,7 +38,9 @@ import java.io.StringReader;
 public class Queries {
 
     public static void main(String[] args) {
-        Query4();
+        Query1();
+        Query2();
+        Query6();
     }
 
     public static void Query1()
@@ -329,5 +331,97 @@ public class Queries {
     System.out.println("Evening Average Time on 09/22/2011 during 4PM to 6PM is ");
     System.out.println(eveningavg);
     System.out.println('\n');
+  }
+
+  public static void Query6(){
+      //find a route from Johnson Creek to Columbia blvd going northbound.
+      String bootstrapUrl = "tcp://localhost:6666";
+      StoreClientFactory factory = new SocketStoreClientFactory(new ClientConfig().setBootstrapUrls(bootstrapUrl));
+
+      String keySchemaJson = "{ \"name\": \"key\", \"type\": \"record\", \"fields\": [{ \"name\": \"num\", \"type\": \"int\" }] }";
+      Schema keySchema = Schema.parse(keySchemaJson);
+      GenericRecord key = new GenericData.Record(keySchema);
+
+      StoreClient<GenericRecord, GenericRecord> client = factory.getStoreClient("stations");
+      String valueSchemaJson = "{\n" +
+              "      \"name\": \"value\",\n" +
+              "      \"type\": \"record\",\n" +
+              "      \"fields\": [{ \n" +
+              "        \"name\": \"stationid\",\n" +
+              "        \"type\": \"int\"\n" +
+              "      },{ \n" +
+              "        \"name\": \"highwayid\",\n" +
+              "        \"type\": \"int\"\n" +
+              "      }, {\n" +
+              "        \"name\": \"milepost\",\n" +
+              "        \"type\": \"string\"\n" +
+              "      }, {\n" +
+              "        \"name\": \"locationtext\",\n" +
+              "        \"type\": \"string\"\n" +
+              "      }, {\n" +
+              "        \"name\": \"upstream\",\n" +
+              "        \"type\": \"int\"\n" +
+              "      }, {\n" +
+              "        \"name\": \"downstream\",\n" +
+              "        \"type\": \"int\"\n" +
+              "      }, {\n" +
+              "        \"name\": \"stationclass\",\n" +
+              "        \"type\": \"int\"\n" +
+              "      }, {\n" +
+              "        \"name\": \"numberlanes\",\n" +
+              "        \"type\": \"int\"\n" +
+              "      }, {\n" +
+              "        \"name\": \"latlon\",\n" +
+              "        \"type\": \"string\"\n" +
+              "      }, {\n" +
+              "        \"name\": \"length\",\n" +
+              "        \"type\": \"string\"\n" +
+              "      }]\n" +
+              "    }";
+      Schema valueSchema = Schema.parse(valueSchemaJson);
+      GenericRecord value = new GenericData.Record(valueSchema);
+
+      //query all the northbound stations
+      int i = 0;
+      key.put("num",i);
+      Versioned<GenericRecord> versioned;
+      Vector<String> route = new Vector<String>(5,1);
+      int next = 0;
+      String stationName = null;
+      while((versioned = client.get(key))!=null){
+          value = versioned.getValue();
+          stationName = value.get("locationtext").toString();
+          if(stationName.equals("Johnson Cr NB"))
+          {
+            route.add(stationName);
+            next = (Integer) value.get("downstream");
+          }
+          i++;
+          key.put("num",i);
+      }
+      //loop through and add the next value of the downstream to the list, then replace that value with the next
+      while(!stationName.startsWith("Columbia"))
+      {
+          i = 0;
+          key.put("num",i);
+          while((versioned = client.get(key)) != null) {
+            value = versioned.getValue();
+            if((Integer) value.get("stationid") == next){
+              stationName = value.get("locationtext").toString();
+              route.add(stationName);
+              next = (Integer) value.get("downstream");
+              break;
+            }
+            i++;
+            key.put("num",i);
+          }
+      }
+
+      //route is now populated with the route from johnson creek to columbia
+      System.out.println("Query 6 Route:");
+      Iterator<String> iter = route.iterator();
+      while(iter.hasNext()){
+        System.out.println("->" + iter.next());
+      }
   }
 }
